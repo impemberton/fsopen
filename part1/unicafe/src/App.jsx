@@ -6,9 +6,9 @@ const Button = ({text, action}) => {
   )
 }
 
-const Stat = ({name, count}) => {
+const StatisticLine = ({name, value}) => {
   return (
-    <p>{name} {count}</p>
+    <p>{name} {value}</p>
   )
 }
 
@@ -23,12 +23,12 @@ const Statistics = (props) => {
   }
   return (
     <>
-    <Stat name="good" count={good} />
-    <Stat name="neutral" count={neutral} />
-    <Stat name="bad" count={bad} />
-    <Stat name="all" count={sum()} />
-    <Stat name="average" count={average()} />
-    <Stat name="positive" count={positive()} />
+    <StatisticLine name="good" value={good} />
+    <StatisticLine name="neutral" value={neutral} />
+    <StatisticLine name="bad" value={bad} />
+    <StatisticLine name="all" value={sum()} />
+    <StatisticLine name="average" value={average()} />
+    <StatisticLine name="positive" value={positive()} />
     </>
   )
 }
