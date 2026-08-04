@@ -12,6 +12,23 @@ const Stat = ({name, count}) => {
   )
 }
 
+const Statistics = (props) => {
+  const [good, bad, neutral] = props.counters
+  const sum = () => good + bad + neutral
+  const average = () => (good - bad) / sum()
+  const positive = () => `${(good / sum()) * 100} %`
+  return (
+    <>
+    <Stat name="good" count={good} />
+    <Stat name="neutral" count={neutral} />
+    <Stat name="bad" count={bad} />
+    <Stat name="all" count={sum()} />
+    <Stat name="average" count={average()} />
+    <Stat name="positive" count={positive()} />
+    </>
+  )
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -30,12 +47,7 @@ const App = () => {
     <Button text="bad" action={makeIncrementer(bad, setBad)}/>
     <h1>statistics</h1>
     <br />
-    <Stat name="good" count={good} />
-    <Stat name="neutral" count={neutral} />
-    <Stat name="bad" count={bad} />
-    <Stat name="all" count={sum()} />
-    <Stat name="average" count={average()} />
-    <Stat name="positive" count={positive()} />
+    <Statistics counters={[good, bad, neutral]} />
     </>  
   )
 }
