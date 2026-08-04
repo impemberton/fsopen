@@ -18,6 +18,9 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   const makeIncrementer = (counter, setter) => () => setter(counter + 1)
+  const sum = () => good + bad + neutral
+  const average = () => (good - bad) / sum()
+  const positive = () => `${(good / sum()) * 100} %`
 
   return (
     <>
@@ -30,6 +33,9 @@ const App = () => {
     <Stat name="good" count={good} />
     <Stat name="neutral" count={neutral} />
     <Stat name="bad" count={bad} />
+    <Stat name="all" count={sum()} />
+    <Stat name="average" count={average()} />
+    <Stat name="positive" count={positive()} />
     </>  
   )
 }
