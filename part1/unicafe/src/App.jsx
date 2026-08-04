@@ -17,6 +17,10 @@ const Statistics = (props) => {
   const sum = () => good + bad + neutral
   const average = () => (good - bad) / sum()
   const positive = () => `${(good / sum()) * 100} %`
+  
+  if (sum() <= 0) {
+    return (<p>No feedback given</p>)
+  }
   return (
     <>
     <Stat name="good" count={good} />
@@ -46,7 +50,6 @@ const App = () => {
     <Button text="neutral" action={makeIncrementer(neutral, setNeutral)}/>
     <Button text="bad" action={makeIncrementer(bad, setBad)}/>
     <h1>statistics</h1>
-    <br />
     <Statistics counters={[good, bad, neutral]} />
     </>  
   )
