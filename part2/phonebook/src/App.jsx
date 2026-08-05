@@ -8,8 +8,11 @@ const App = () => {
   
   const handleSubmit = (event) => {
     event.preventDefault()
-    setPersons(persons.concat({name: newName}))
-    setNewName('')
+    if (persons.map(person => person.name).indexOf(newName) === -1) {
+      setPersons(persons.concat({name: newName}))
+    } else {
+      alert(`${newName} is already added to phonebook`)
+    }
   }
   
   const handleChange = (event) => {
