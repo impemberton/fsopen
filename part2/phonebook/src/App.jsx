@@ -1,16 +1,16 @@
 import { useState } from 'react'
 
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [filter, setFilter] = useState('')
-  
+const Filter = ({setFilter}) => {
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value)
+  }
+
+  return (
+    <div>filter: <input onChange={handleFilterChange} /></div>
+  )
+}
+
+const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setPersons}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     if (persons.map(person => person.name).indexOf(newName) === -1) {
@@ -26,29 +26,54 @@ const App = () => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value)
-  }
   return (
-    <div>
-      <h2>Phonebook</h2>
-      <div>filter: <input onChange={handleFilterChange} /></div>
-      <h2>Add Contact</h2>
-      <form onSubmit={handleSubmit}>
-        <div>name: <input onChange={handleNameChange}/></div>
-        <div>number: <input onChange={handleNumberChange}/></div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {
+    <form onSubmit={handleSubmit}>
+      <div>name: <input onChange={handleNameChange}/></div>
+      <div>number: <input onChange={handleNumberChange}/></div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  
+  )
+}
+
+const Persons = ({persons, filter}) => {
+  return (
         persons.map(person => { 
           if (person.name.toLowerCase().includes(filter.toLowerCase())) {
             return (<p key={person.name}>{person.name} {person.number}</p>)
-          }
-        }) 
-      }
+          }})
+  )
+}
+
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
+  
+  
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <Filter setFilter={setFilter} />
+      <h2>Add Contact</h2>
+      <PersonForm 
+        newName={newName} 
+        newNumber={newNumber}
+        persons={persons} 
+        setNewName={setNewName} 
+        setNewNumber={setNewNumber} 
+        setPersons={setPersons} 
+      />
+      <h2>Numbers</h2>
+      <Persons persons={persons} filter={filter}/>
     </div>
   )
 }
