@@ -15,7 +15,11 @@ const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setP
   const handleSubmit = (event) => {
     event.preventDefault()
     if (persons.map(person => person.name).indexOf(newName) === -1) {
-      setPersons(persons.concat({name: newName, number: newNumber}))
+      const newPerson = {name: newName, number: newNumber}
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(response => console.log(response))
+      setPersons(persons.concat(newPerson))
     } else {
       alert(`${newName} is already added to phonebook`)
     }
