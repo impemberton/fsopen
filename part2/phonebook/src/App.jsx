@@ -15,13 +15,21 @@ const Filter = ({setFilter}) => {
 const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setPersons}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
+    const newPerson = {name: newName, number: newNumber}
     if (persons.map(person => person.name).indexOf(newName) === -1) {
-      const newPerson = {name: newName, number: newNumber}
       personService
         .create(newPerson)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
     } else {
-      alert(`${newName} is already added to phonebook`)
+      if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const oldPerson = persons.filter(person => person.name === newName)[0]
+        personService
+          .update(oldPerson.id, newPerson)
+          .then(returnedPerson => {
+            const personsCopy = persons.filter(person => person.name !== newName)
+            setPersons([...personsCopy, returnedPerson])
+          })
+      }
     }
   }
   

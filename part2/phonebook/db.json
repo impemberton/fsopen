@@ -1,4 +1,15 @@
 {
-  "persons": [],
+  "persons": [
+    {
+      "name": "test",
+      "number": "1323256 ",
+      "id": "0F2UEe1KE78"
+    },
+    {
+      "name": "hello",
+      "number": "3456832",
+      "id": "8PN8LcqxrVM"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
