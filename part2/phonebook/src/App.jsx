@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
+import Notification from './components/Notification'
+import './index.css'
 
 const Filter = ({setFilter}) => {
   const handleFilterChange = (event) => {
@@ -12,10 +14,12 @@ const Filter = ({setFilter}) => {
   )
 }
 
-const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setPersons}) => {
+const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setPersons, setErrorMessage}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     const newPerson = {name: newName, number: newNumber}
+    setErrorMessage(`Added ${newName}`)
+    setTimeout(() => setErrorMessage(null), 5000)
     if (persons.map(person => person.name).indexOf(newName) === -1) {
       personService
         .create(newPerson)
@@ -71,6 +75,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
   
   useEffect(() => {
     personService
@@ -83,6 +88,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter setFilter={setFilter} />
       <h2>Add Contact</h2>
       <PersonForm 
@@ -92,6 +98,7 @@ const App = () => {
         setNewName={setNewName} 
         setNewNumber={setNewNumber} 
         setPersons={setPersons} 
+        setErrorMessage={setErrorMessage}
       />
       <h2>Numbers</h2>
       <Persons persons={persons} setPersons={setPersons} filter={filter}/>
