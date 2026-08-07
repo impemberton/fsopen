@@ -43,11 +43,17 @@ const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setP
   )
 }
 
-const Persons = ({persons, filter}) => {
+const Persons = ({persons, setPersons, filter}) => {
+  const handleDelete = (id) => {
+    personService
+      .remove(id)
+      .then(returnedPerson => setPersons(persons.filter(person => person.id !== returnedPerson.id)))
+  }
+    
   return (
         persons.map(person => { 
           if (person.name.toLowerCase().includes(filter.toLowerCase())) {
-            return (<p key={person.name}>{person.name} {person.number}</p>)
+            return (<p key={person.name}>{person.name} {person.number}<button onClick={() => handleDelete(person.id)}>delete</button></p>)
           }})
   )
 }
@@ -80,7 +86,7 @@ const App = () => {
         setPersons={setPersons} 
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter}/>
+      <Persons persons={persons} setPersons={setPersons} filter={filter}/>
     </div>
   )
 }
