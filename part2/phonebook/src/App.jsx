@@ -18,8 +18,8 @@ const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setP
   const handleSubmit = (event) => {
     event.preventDefault()
     const newPerson = {name: newName, number: newNumber}
-    setErrorMessage(`Added ${newName}`)
-    setTimeout(() => setErrorMessage(null), 5000)
+    setErrorMessage({message: `Added ${newName}`, type: 'notif'})
+    setTimeout(() => setErrorMessage({message: null, type: null}), 5000)
     if (persons.map(person => person.name).indexOf(newName) === -1) {
       personService
         .create(newPerson)
@@ -32,6 +32,10 @@ const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setP
           .then(returnedPerson => {
             const personsCopy = persons.filter(person => person.name !== newName)
             setPersons([...personsCopy, returnedPerson])
+          })
+          .catch(() => {
+            setErrorMessage({message: `Information of ${newName} has already been removed from the server`, type: 'error'})
+            setTimeout(() => setErrorMessage({message: null, type: null}), 5000)
           })
       }
     }
@@ -75,7 +79,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState({message: null, type: "error"})
   
   useEffect(() => {
     personService
@@ -88,7 +92,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={errorMessage.message} type={errorMessage.type}/>
       <Filter setFilter={setFilter} />
       <h2>Add Contact</h2>
       <PersonForm 
