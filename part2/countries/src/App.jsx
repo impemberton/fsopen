@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const Countries = ({countries}) => {
+const Countries = ({countries, setCountries}) => {
+        const handleShow = (country) => {
+          setCountries([country])
+        }
+  
         if(countries.length > 10) {
           return (<p>Too many matches, specify another filter</p>)
         }
@@ -24,7 +28,7 @@ const Countries = ({countries}) => {
           )
         }
         return (
-          countries.map(country => <p key={country.name.common}>{country.name.common}</p>) 
+          countries.map(country => <p key={country.name.common}>{country.name.common}<button onClick={() => handleShow(country)}>Show</button></p>) 
         )
         
 }
@@ -52,7 +56,7 @@ function App() {
   return (
     <div>
       <p>find countries<input onChange={handleChange}></input></p>
-      <Countries countries={countries}/>
+      <Countries countries={countries} setCountries={setCountries}/>
     </div>
   )
 }
