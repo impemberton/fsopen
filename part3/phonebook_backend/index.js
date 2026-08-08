@@ -37,6 +37,7 @@ const logger = morgan((tokens, req, res) => {
 })
 app.use(express.json())
 app.use(logger)
+app.use(express.static('dist'))
 
 app.get('/', (request, response) => {
   response.send('<h1>test</h1>')
