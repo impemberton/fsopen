@@ -63,7 +63,7 @@ const Persons = ({persons, setPersons, filter}) => {
   const handleDelete = (id) => {
     personService
       .remove(id)
-      .then(returnedPerson => setPersons(persons.filter(person => person.id !== returnedPerson.id)))
+      .then(() => setPersons(persons.filter(person => person.id !== id)))
   }
     
   return (
