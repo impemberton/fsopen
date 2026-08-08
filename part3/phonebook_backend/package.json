@@ -11,7 +11,7 @@
     "dev": "node --watch index.js",
     "start": "node index.js",
     "build:ui": "rm -rf dist && cd ../phonebook && npm install && npm run build && cp -r dist ../phonebook_backend",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && cd ../phonebook_backend && npm start
   },
   "dependencies": {
     "express": "^5.2.1",
