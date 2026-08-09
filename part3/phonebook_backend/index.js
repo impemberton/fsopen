@@ -114,7 +114,10 @@ app.delete('/api/people/:id', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
-  response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`)
+  Person.find({})
+    .then(people => {
+      response.send(`<p>Phonebook has info for ${people.length} people</p><p>${new Date()}</p>`)
+    })
 })
 
 const unknownEndpoint = (request, response) => {
