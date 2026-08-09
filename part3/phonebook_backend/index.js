@@ -7,29 +7,6 @@ const Person = require('./models/person')
 app.use(express.static('dist'))
 app.use(express.json())
 
-let persons = [
-    { 
-      id: '1',
-      name: "Arto Hellas", 
-      number: "040-123456"
-    },
-    { 
-      id: "2",
-      name: "Ada Lovelace", 
-      number: "39-44-5323523"
-    },
-    { 
-      id: "3",
-      name: "Dan Abramov", 
-      number: "12-43-234345"
-    },
-    { 
-      id: "4",
-      name: "Mary Poppendieck", 
-      number: "39-23-6423122"
-    }
-]
-
 const logger = morgan((tokens, req, res) => {
   return [
     tokens.method(req, res),
@@ -81,23 +58,23 @@ app.post('/api/people', (request, response, next) => {
     name: body.name,
     number: body.number,
   })
-  
+
   person.save()
-    .then(savedPerson => {
+    .then(() => {
       response.json(person)
     })
     .catch(error => next(error))
 })
 
 app.put('/api/people/:id', (request, response, next) => {
-  const { name, number } = request.body
-  
+  const { number } = request.body
+
   Person.findById(request.params.id)
     .then(person => {
       if (!person) {
         return response.status(404).end()
       }
-      
+
       person.number = number
 
       return person.save().then(updatedPerson => {
@@ -109,7 +86,7 @@ app.put('/api/people/:id', (request, response, next) => {
 
 app.delete('/api/people/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -135,8 +112,8 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({error: error.message})
-  } 
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }
