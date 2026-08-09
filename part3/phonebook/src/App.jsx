@@ -18,12 +18,18 @@ const PersonForm = ({newName, newNumber, persons, setNewName, setNewNumber, setP
   const handleSubmit = (event) => {
     event.preventDefault()
     const newPerson = {name: newName, number: newNumber}
-    setErrorMessage({message: `Added ${newName}`, type: 'notif'})
-    setTimeout(() => setErrorMessage({message: null, type: null}), 5000)
     if (persons.map(person => person.name).indexOf(newName) === -1) {
       personService
         .create(newPerson)
-        .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setErrorMessage({message: `Added ${newName}`, type: 'notif'})
+          setTimeout(() => setErrorMessage({message: null, type: null}), 5000)
+        })
+        .catch(error => {
+          setErrorMessage({message: error.response.data.error, type: 'error'})
+          setTimeout(() => setErrorMessage({message: null, type: null}), 5000)
+        })
     } else {
       if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         const oldPerson = persons.filter(person => person.name === newName)[0]
