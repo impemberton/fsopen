@@ -160,3 +160,20 @@ describe('favourite blog', () => {
     assert.deepStrictEqual(result, multipleFavourites[0])
   })
 })
+
+describe('most blogs', () => {
+  test('of empty list is undefined', () => {
+    const result = listHelper.mostBlogs([])
+    assert.strictEqual(result, undefined)
+  })
+
+  test('when list has only one blog, that author has the most', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    assert.deepStrictEqual(result, { author: 'Edsger W. Dijkstra', blogs: 1 })
+  })
+
+  test('correctly finds most blogs', () => {
+    const result = listHelper.mostBlogs(blogs)
+    assert.deepStrictEqual(result, { author: 'Robert C. Martin', blogs: 3 })
+  })
+})
