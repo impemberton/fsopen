@@ -21,10 +21,15 @@ test('blogs are returned as json', async () => {
 })
 
 test('correct amount of initial blogs are returned', async () => {
-  console.log("TEST")
   const response = await api.get('/api/blogs')
   
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
+})
+
+test.only('blog posts contain id property', async () => {
+  const response = await api.get('/api/blogs')
+  
+  assert("id" in response.body[0])
 })
 
 after(async () => {
