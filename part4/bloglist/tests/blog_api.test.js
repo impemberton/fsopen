@@ -55,7 +55,7 @@ test('posting successfully creates a new blog', async () => {
   assert.strictEqual(updatedBlogs.body.at(-1).likes, newBlog.likes)
 })
 
-test.only('blogs posted without the likes property default to 0 likes', async () => {
+test('blogs posted without the likes property default to 0 likes', async () => {
   const newBlog = {
     title: "Gobbledygook",
     author: "Chimmeny Bingus",
@@ -70,6 +70,28 @@ test.only('blogs posted without the likes property default to 0 likes', async ()
   const updatedBlogs = await api.get('/api/blogs')
   
   assert.strictEqual(updatedBlogs.body.at(-1).likes, 0)
+})
+
+test.only('blogs without title receive a 400 status code', async () => {
+  const newBlog = {
+    author: "Chimmeny Bingus",
+    url: "https://Chimmenybingus.com/",
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test.only('blogs without url receive a 400 status code', async () => {
+  const newBlog = {
+    title: "Gobbledygook",
+    author: "Chimmeny Bingus",
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 after(async () => {
   await mongoose.connection.close()
