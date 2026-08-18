@@ -57,7 +57,7 @@ test('posting successfully creates a new blog', async () => {
 
 test('blogs posted without the likes property default to 0 likes', async () => {
   const newBlog = {
-    title: "Gobbledygook",
+    title: "Gobblednygook",
     author: "Chimmeny Bingus",
     url: "https://Chimmenybingus.com/",
   }
@@ -72,7 +72,7 @@ test('blogs posted without the likes property default to 0 likes', async () => {
   assert.strictEqual(updatedBlogs.body.at(-1).likes, 0)
 })
 
-test.only('blogs without title receive a 400 status code', async () => {
+test('blogs without title receive a 400 status code', async () => {
   const newBlog = {
     author: "Chimmeny Bingus",
     url: "https://Chimmenybingus.com/",
@@ -83,7 +83,7 @@ test.only('blogs without title receive a 400 status code', async () => {
     .expect(400)
 })
 
-test.only('blogs without url receive a 400 status code', async () => {
+test('blogs without url receive a 400 status code', async () => {
   const newBlog = {
     title: "Gobbledygook",
     author: "Chimmeny Bingus",
@@ -93,6 +93,21 @@ test.only('blogs without url receive a 400 status code', async () => {
     .send(newBlog)
     .expect(400)
 })
+
+test.only('blogs can be deleted by id', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+  
+  const blogsAfter = await helper.blogsInDb()
+  const ids = blogsAfter.map(blog => blog.id)
+  
+  assert(!ids.includes(blogToDelete.id))
+  assert.strictEqual(blogsAfter.length, helper.initialBlogs.length - 1)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
