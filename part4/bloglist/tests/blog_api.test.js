@@ -1,5 +1,5 @@
 const assert = require('node:assert')
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe} = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -94,7 +94,7 @@ test('blogs without url receive a 400 status code', async () => {
     .expect(400)
 })
 
-test.only('blogs can be deleted by id', async () => {
+test('blogs can be deleted by id', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
   await api
@@ -106,6 +106,85 @@ test.only('blogs can be deleted by id', async () => {
   
   assert(!ids.includes(blogToDelete.id))
   assert.strictEqual(blogsAfter.length, helper.initialBlogs.length - 1)
+})
+
+describe('blogs can be updated id', () => {
+  test.only('title can be updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    
+    const updates = {
+      title: "New Title",
+    }
+    const updatedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updates)
+      .expect(200)
+    
+    assert.strictEqual(updatedBlog.body.title, updates.title)
+  })
+  test.only('author can be updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    
+    const updates = {
+      author: "New Author",
+    }
+    const updatedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updates)
+      .expect(200)
+    
+    assert.strictEqual(updatedBlog.body.author, updates.author)
+  })
+  test.only('url can be updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    
+    const updates = {
+      url: "https://NewRL.com/",
+    }
+    const updatedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updates)
+      .expect(200)
+    
+    assert.strictEqual(updatedBlog.body.url, updates.url)
+  })
+  test.only('likes can be updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    
+    const updates = {
+      likes: 45,
+    }
+    const updatedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updates)
+      .expect(200)
+    
+    assert.strictEqual(updatedBlog.body.likes, updates.likes)
+  })
+  test.only('all properties can be updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    
+    const updates = {
+      title: "New Title",
+      author: "New Author",
+      url: "https://NewRL.com/",
+      likes: 45,
+    }
+    const updatedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updates)
+      .expect(200)
+    
+    assert.strictEqual(updatedBlog.body.title, updates.title)
+    assert.strictEqual(updatedBlog.body.author, updates.author)
+    assert.strictEqual(updatedBlog.body.url, updates.url)
+    assert.strictEqual(updatedBlog.body.likes, updates.likes)
+  })
 })
 
 after(async () => {
